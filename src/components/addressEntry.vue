@@ -36,6 +36,7 @@ export default Vue.extend({
         label="Address Line 1"
         name="line1"
         @input="updateAddress(index, { ...address, line1: $event })"
+        :required="true"
       />
       <InputComponent
         type="text"
@@ -43,6 +44,7 @@ export default Vue.extend({
         label="Postcode"
         name="postcode"
         @input="updateAddress(index, { ...address, postcode: $event })"
+        :required="true"
       />
       <InputComponent
         type="date"
@@ -50,6 +52,7 @@ export default Vue.extend({
         label="Date Moved In"
         name="dateMovedIn"
         @input="updateAddress(index, { ...address, dateMovedIn: $event })"
+        :required="true"
       />
       <b-button @click="removeEntry(index)" v-if="addresses.length > 1"
         >Remove Address</b-button

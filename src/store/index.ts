@@ -28,6 +28,11 @@ export default new Vuex.Store<State>({
       threeYearsAgo.setFullYear(threeYearsAgo.getFullYear() - 3);
       return lastDate <= threeYearsAgo;
     },
+    isValidSubmission(state): boolean {
+      return state.addresses.every(
+        (address) => address.line1 && address.postcode && address.dateMovedIn
+      );
+    },
   },
   mutations: {
     setUser(state, user: User) {

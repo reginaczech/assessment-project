@@ -26,6 +26,10 @@ export default Vue.extend({
       type: String,
       default: "",
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>
@@ -37,6 +41,7 @@ export default Vue.extend({
       :value="value"
       @input="$emit('input', $event)"
       :class="[classes]"
+      :required="required"
     />
   </div>
 </template>
