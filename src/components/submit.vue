@@ -6,6 +6,17 @@ import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 export default Vue.extend({
   name: "SubmitComponent",
+  props: {
+    isButtonDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    //Flag to determine which type of submission should be handled - click event (false) or submit (true)
+    isFormSubmission: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       errorMsg: "",
@@ -28,7 +39,15 @@ export default Vue.extend({
           address.line1 && address.postcode && address.dateMovedIn
       );
     },
-    async submit() {
+    //Call to handle any submit types
+    handleClick() {
+      if (this.isFormSubmission) {
+        this.submitForm(); //submit form event
+      } else {
+        this.$emit("click"); //click event
+      }
+    },
+    async submitForm() {
       //Reset the error and success messages
       this.errorMsg = "";
       this.successMsg = "";
@@ -78,11 +97,12 @@ export default Vue.extend({
   <div>
     <p v-if="errorMsg" class="text-danger">{{ errorMsg }}</p>
     <b-button
-      @click="submit"
+      @click="handleClick"
       variant="primary"
-      :disabled="!isValidAddressHistory"
-      >Submit</b-button
+      :disabled="isButtonDisabled"
     >
+      Submit
+    </b-button>
     <p v-if="successMsg" class="text-success">{{ successMsg }}</p>
   </div>
 </template>
