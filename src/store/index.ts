@@ -1,13 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { Address, State, User } from "@/types";
-
+import { Address, Claim, State, User } from "@/types";
+import { createClaim } from "@/core/createClaim";
 Vue.use(Vuex);
 
 export default new Vuex.Store<State>({
   state: {
     user: null,
     addresses: [{ line1: "", postcode: "", dateMovedIn: "" }] as Address[],
+    claims: [] as Claim[],
   },
   getters: {
     user(state): User | null {
@@ -28,11 +29,6 @@ export default new Vuex.Store<State>({
       threeYearsAgo.setFullYear(threeYearsAgo.getFullYear() - 3);
       return lastDate <= threeYearsAgo;
     },
-    isValidSubmission(state): boolean {
-      return state.addresses.every(
-        (address) => address.line1 && address.postcode && address.dateMovedIn
-      );
-    },
   },
   mutations: {
     setUser(state, user: User) {
@@ -50,7 +46,31 @@ export default new Vuex.Store<State>({
     ) {
       Vue.set(state.addresses, index, address);
     },
+    resetAddress(state) {
+      state.addresses = [{ line1: "", postcode: "", dateMovedIn: "" }];
+    },
+    setClaim(state, claims: Claim) {
+      state.claims.push(claims);
+    },
   },
-  actions: {},
+  actions: {
+    async createClaimAction(
+      { commit },
+      { userId, creationIpAddress, claimData }
+    ) {
+      try {
+        const [newClaim, error] = await createClaim(
+          userId,
+          creationIpAddress,
+          claimData
+        );
+        if (error) throw error;
+        commit("setClaim", newClaim);
+        return [newClaim, null];
+      } catch (error) {
+        return [null, error];
+      }
+    },
+  },
   modules: {},
 });
