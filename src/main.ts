@@ -9,6 +9,7 @@ import SubmitComponent from "./components/submit.vue";
 import InputComponent from "./components/input.vue";
 import AddressEntryComponent from "./components/addressEntry.vue";
 import FormView from "@/views/FormView.vue";
+import HomeView from "@/views/HomeView.vue";
 import "bootstrap/dist/css/bootstrap.css";
 
 Vue.config.productionTip = false;
@@ -26,5 +27,6 @@ new Vue({
     InputComponent,
     AddressEntryComponent,
     FormView,
+    HomeView,
   },
 }).$mount("#app");
