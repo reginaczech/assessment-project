@@ -32,6 +32,7 @@ export default Vue.extend({
 </script>
 <template>
   <div>
+    <!-- Home View: utilizes formComponent for user to enter UserId details. User is redirected to :/usedId page where user validation functionality is held -->
     <FormComponent>
       <template v-slot:title>
         <TextComponent
@@ -43,7 +44,7 @@ export default Vue.extend({
       <template v-slot:subtitle>
         <TextComponent
           text="To continue to your onboarding form, please provide your User ID:"
-          type="h6"
+          type="h5"
           classes="text-secondary"
         />
       </template>
@@ -67,7 +68,7 @@ export default Vue.extend({
         />
       </template>
     </FormComponent>
-    <p>
+    <p class="text-center">
       If you do not have access to your User ID, please email
       support@claimsgate.co.uk
     </p>

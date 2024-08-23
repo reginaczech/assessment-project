@@ -5,6 +5,7 @@ import TextComponent from "@/components/text.vue";
 import SubmitComponent from "@/components/submit.vue";
 import AddressEntryComponent from "@/components/addressEntry.vue";
 import { mapGetters } from "vuex";
+import { User } from "@/types";
 export default Vue.extend({
   name: "FormView",
   components: {
@@ -14,7 +15,10 @@ export default Vue.extend({
     AddressEntryComponent,
   },
   computed: {
-    ...mapGetters(["user", "isValidAddressHistory"]),
+    ...(mapGetters(["user", "isValidAddressHistory"]) as {
+      user: () => User;
+      isValidAddressHistory: () => boolean;
+    }),
   },
 });
 </script>
@@ -38,6 +42,7 @@ export default Vue.extend({
       <template v-slot:question>
         <AddressEntryComponent />
       </template>
+      <!-- Disables button if last address in list is not greater than 3 years. -->
       <template v-slot:submit>
         <p v-if="!isValidAddressHistory" class="text-danger">
           The last address in your history must be at least 3 years old.
