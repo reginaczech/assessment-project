@@ -30,6 +30,20 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    //Props for options - utilized for postcode autocompletion
+    options: {
+      type: Array,
+      default: () => [],
+    },
+    showOptions: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      suggestions: [] as string[],
+    };
   },
 });
 </script>
@@ -40,8 +54,16 @@ export default Vue.extend({
       :type="type"
       :value="value"
       @input="$emit('input', $event)"
+      :list="showOptions ? 'postcode-options' : null"
       :class="[classes]"
       :required="required"
+      autocomplete="off"
     />
+    <!-- Autocomplete for postcode suggestions - optional -->
+    <datalist id="postcode-options" v-if="showOptions">
+      <option v-for="option in options" :key="option" :value="option">
+        {{ option }}
+      </option>
+    </datalist>
   </div>
 </template>
