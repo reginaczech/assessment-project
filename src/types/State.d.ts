@@ -6,4 +6,5 @@ export interface State {
   user: User | null;
   addresses: Address[];
   claims: Claim[];
+  userError: string;
 }

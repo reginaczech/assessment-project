@@ -15,11 +15,15 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapGetters(["addresses", "needMoreAddresses", "isValidAddressHistory"]) as {
+    ...(mapGetters([
+      "addresses",
+      "needMoreAddresses",
+      "isValidAddressHistory",
+    ]) as {
       addresses: () => Address[];
-      needMoreAddresses: () =>  boolean;
+      needMoreAddresses: () => boolean;
       isValidAddressHistory: () => boolean;
-    },
+    }),
   },
   methods: {
     addEntry() {

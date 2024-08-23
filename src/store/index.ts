@@ -6,9 +6,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store<State>({
   state: {
+    //Storing in global store to allow multiple components to have access to these states
     user: null,
     addresses: [{ line1: "", postcode: "", dateMovedIn: "" }] as Address[],
     claims: [] as Claim[],
+    userError: "",
   },
   getters: {
     user(state): User | null {
@@ -37,6 +39,12 @@ export default new Vuex.Store<State>({
   mutations: {
     setUser(state, user: User) {
       state.user = user;
+    },
+    setUserError(state, errorMessage: string) {
+      state.userError = errorMessage;
+    },
+    clearUserError(state) {
+      state.userError = "";
     },
     addAddress(state, address: Address) {
       state.addresses.push(address);

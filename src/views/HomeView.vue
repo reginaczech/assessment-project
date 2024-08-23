@@ -4,6 +4,7 @@ import FormComponent from "@/components/form.vue";
 import TextComponent from "@/components/text.vue";
 import InputComponent from "@/components/input.vue";
 import SubmitComponent from "@/components/submit.vue";
+import { mapGetters, mapState } from "vuex";
 export default Vue.extend({
   name: "HomeView",
   components: {
@@ -15,17 +16,31 @@ export default Vue.extend({
   data() {
     return {
       userId: "",
-      error: "",
     };
+  },
+  computed: {
+    ...mapState({
+      userError: (state: any) => state.userError, // Accessing Vuex state directly
+    }),
   },
   methods: {
     submitUserId() {
       if (this.userId.trim()) {
+        // Clear error before navigation
+        this.$store.commit("clearUserError");
         //Navigate to the FormView via the /:userId route.
-        this.$router.push({ path: `${this.userId}` });
-      } else {
-        this.error = "User does not exist, please try again";
+        this.$router.replace({ path: `${this.userId}` });
       }
+    },
+  },
+  //Watches for the query parameter from the router to update error message
+  watch: {
+    "$route.query.userError": {
+      handler(newError) {
+        if (newError) {
+          this.$store.commit("setUserError", newError);
+        }
+      },
     },
   },
 });
@@ -58,8 +73,8 @@ export default Vue.extend({
         />
       </template>
       <template v-slot:submit>
-        <p v-if="error" class="text-danger">
-          {{ error }}
+        <p v-if="userError" class="text-danger">
+          {{ userError }}
         </p>
         <SubmitComponent
           buttonText="Submit User ID"
