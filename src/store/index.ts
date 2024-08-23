@@ -20,9 +20,13 @@ export default new Vuex.Store<State>({
     needMoreAddresses(state): boolean {
       return state.addresses.length < 3;
     },
+    //Method that checks if the address history is valid - either greater than 3 years OR 3 addresses
     isValidAddressHistory(state): boolean {
       if (state.addresses.length === 0) return false;
+      //Validation for address length
+      if (state.addresses.length > 2) return true;
 
+      //Validation for address date > 3 years
       const lastAddress = state.addresses[state.addresses.length - 1];
       const lastDate = new Date(lastAddress.dateMovedIn);
       const threeYearsAgo = new Date();
@@ -49,15 +53,24 @@ export default new Vuex.Store<State>({
     resetAddress(state) {
       state.addresses = [{ line1: "", postcode: "", dateMovedIn: "" }];
     },
-    setClaim(state, claims: Claim) {
-      state.claims.push(claims);
+    setClaim(state, claim: Claim) {
+      state.claims.push(claim);
     },
   },
   actions: {
+    // This is an action, not method as its an async operation
     async createClaimAction(
       { commit },
-      { userId, creationIpAddress, claimData }
-    ) {
+      {
+        userId,
+        creationIpAddress,
+        claimData,
+      }: {
+        userId: string;
+        creationIpAddress: string;
+        claimData: { addresses: Address[] };
+      }
+    ): Promise<[Claim | null, Error | null]> {
       try {
         const [newClaim, error] = await createClaim(
           userId,
@@ -68,7 +81,7 @@ export default new Vuex.Store<State>({
         commit("setClaim", newClaim);
         return [newClaim, null];
       } catch (error) {
-        return [null, error];
+        return [null, error as Error];
       }
     },
   },
